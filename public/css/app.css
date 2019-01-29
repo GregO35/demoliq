@@ -7,7 +7,7 @@ bod{
 }
 
 main{
-    flex-grow: ;
+    flex :1;
 }
 header{
     background-color: white;

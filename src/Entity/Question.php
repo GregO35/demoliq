@@ -25,6 +25,13 @@ class Question
         $this->setStatus('debating');
     }
 
+    public function __construct()
+    {
+        $this->setCreationDate(new \DateTime());
+        $this->setSupports(0);
+        $this->setStatus('debating');
+    }
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
