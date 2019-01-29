@@ -1,9 +1,25 @@
-body{
+bod{
     font-family: 'Open Sans', sans-serif;
+    background-color: #b8daff;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 
+main{
+    flex-grow: ;
+}
+header{
+    background-color: white;
+}
 
+footer{
+    background-color: #0056b3;
+}
 
+a{
+    color: #5eb5e0;
+}
 
 
 header img.img-fluid {

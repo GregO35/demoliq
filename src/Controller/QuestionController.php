@@ -4,7 +4,9 @@ namespace App\Controller;
 
 
 use App\Entity\Question;
+use App\Form\QuestionType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 class QuestionController extends AbstractController
@@ -17,10 +19,31 @@ class QuestionController extends AbstractController
      *     )
      * fonction pour créer une question, INSERT
      */
-    public function create()
+    public function create(Request $request) //prendre le http/fondation pour le use
     {
         $question = new Question();
 
+        // création intance formulaire, les données sont mises directement dans l'entité
+        $questionForm= $this->createForm(QuestionType::class, $question);
+
+        $questionForm->handleRequest($request);
+
+        if ($questionForm->isSubmitted()&&
+            $questionForm->isValid()){
+                 $em = $this
+                     ->getDoctrine()
+                     ->getManager();
+                 $em->persist($question);
+                 $em->flush();
+
+                 // crée un flash message
+                $this->addFlash('success', 'Merci pour votre participation !');
+
+                //redirige vers la page de détails de cette question
+                return $this->redirectToRoute('question_detail',
+                    ['id'=> $question->getId()]);
+        }
+        /*
         $question->setTitle('retret');
         $question->setDescription('fsdfsdfsd');
         $question->setStatus('debated');
@@ -43,9 +66,9 @@ class QuestionController extends AbstractController
         //pour supprimer la requete
         // $em->remove($question);
         // $em->flush();
-
+        */
         return $this->render('question/create.html.twig', [
-
+            "questionForm"=> $questionForm->createView()
         ]);
     }
 

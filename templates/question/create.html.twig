@@ -3,8 +3,12 @@
 {% block content %}
     <h1>Ajouter votre question</h1>
 
-{# affiche le formulaire#}
-
+    {# affiche le formulaire#}
+    {#novalidate pour désactiver les champs de saisie obligatoire dans le navigateur#}
+    {{ form_start(questionForm, {'attr':{'novalidate': 'novalidate'}}) }}
+    {{ form_widget(questionForm) }}
+    <button class="btn btn-success">Envoyer!</button>
+    {{ form_end(questionForm) }}
 
 {% endblock %}
 
