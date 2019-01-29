@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>{% block title %}Demoliq{% endblock %}</title>
+
+        <link rel="stylesheet" href="{{ asset('css/bootstrap.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/open-sans.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+
+
+        <link rel="icon" href="{{ asset('img/people_mini.png') }}"/>
+
+
+
+    </head>
+    <body>
+        <div class="container">
+                <header>
+                    <div>
+                        <a href="{{ path ('home') }}"><img class ="img-fluid" alt = "Demoliq" src="{{ asset('img/people.png') }}"></a>
+                    </div>
+
+              </header>
+
+              <main>
+                   {% block content %}{% endblock %}
+             </main>
+
+            <div>
+                <footer>
+                    <nav class="nav">
+                        <a class="nav-link" href="{{ path ('home') }}">Accueil</a>
+                        <a class="nav-link" href="{{ path ('faq') }}">FAQ</a>
+                        <a class="nav-link" href="{{ path ('CGU') }}">CGU</a>
+                        <a class="nav-link" href="{{ path ('fonctionnement') }}">Fonctionnement</a>
+                    </nav>
+                </footer>
+            </div>
+
+
+        </div>
+
+        <script src="{{ asset('js/jquery.js') }}"></script>
+        <script src="{{ asset('js/bootstrap.js') }}"></script>
+
+    </body>
+</html>
