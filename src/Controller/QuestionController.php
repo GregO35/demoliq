@@ -10,6 +10,46 @@ use Symfony\Component\Routing\Annotation\Route;
 class QuestionController extends AbstractController
 {
     /**
+     *
+     * @Route("/questions/ajouter",
+     *     name="question_create",
+     *     methods={"GET", "POST"}
+     *     )
+     * fonction pour créer une question, INSERT
+     */
+    public function create()
+    {
+        $question = new Question();
+
+        $question->setTitle('retret');
+        $question->setDescription('fsdfsdfsd');
+        $question->setStatus('debated');
+        $question->setSupports('123');
+        $question->setCreationDate(new \DateTime());
+
+        //récupère l'EntityManager de Doctrine
+        $em = $this
+            ->getDoctrine()
+            ->getManager();
+        // on demande à Doctrine de sauvegarder notre instance
+        $em->persist($question);
+        // exécute requete sql
+        $em->flush();
+
+        // modification de l'instance
+       // $question->setDescription('fsozejzezoaezae');
+       // $em->flush();
+
+        //pour supprimer la requete
+        // $em->remove($question);
+        // $em->flush();
+
+        return $this->render('question/create.html.twig', [
+
+        ]);
+    }
+
+    /**
      * Symfony récupère l'id dans l'URL et le passe à notre fonction.
      * Le paramètre dans l'URL et celui de la fonction doivent être nommés identiquement.
      *
