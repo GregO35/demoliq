@@ -2,6 +2,8 @@
 
 {% block content %}
     <h1>{{ question.title }}</h1><br>
+    {#ça marche car la méthode to string a été implémentée dans Sudject.php#}
+    <div>{{ question.subjects|join('/') }}</div>
 
 
     <div>

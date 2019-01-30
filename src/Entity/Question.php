@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 // le premier use permet de faire les vérifications du fomulaire
 use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
@@ -27,6 +29,8 @@ class Question
         $this->setCreationDate(new \DateTime());
         $this->setSupports(0);
         $this->setStatus('debating');
+        $this->messages = new ArrayCollection();
+        $this->subjects = new ArrayCollection();
     }
 
     /**
@@ -76,6 +80,18 @@ class Question
      * @ORM\Column(type="string", length=20)
      */
     private $status;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Message",
+     *     mappedBy="question",
+     *     orphanRemoval=true)
+     */
+    private $messages;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Subject", inversedBy="questions")
+     */
+    private $subjects;
 
     public function getId(): ?int
     {
@@ -138,6 +154,63 @@ class Question
     public function setStatus(string $status): self
     {
         $this->status = $status;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Message[]
+     */
+    public function getMessages(): Collection
+    {
+        return $this->messages;
+    }
+
+    public function addMessage(Message $message): self
+    {
+        if (!$this->messages->contains($message)) {
+            $this->messages[] = $message;
+            $message->setQuestion($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMessage(Message $message): self
+    {
+        if ($this->messages->contains($message)) {
+            $this->messages->removeElement($message);
+            // set the owning side to null (unless already changed)
+            if ($message->getQuestion() === $this) {
+                $message->setQuestion(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Subject[]
+     */
+    public function getSubjects(): Collection
+    {
+        return $this->subjects;
+    }
+
+    public function addSubject(Subject $subject): self
+    {
+        if (!$this->subjects->contains($subject)) {
+            $this->subjects[] = $subject;
+        }
+
+        return $this;
+    }
+
+    public function removeSubject(Subject $subject): self
+    {
+        if ($this->subjects->contains($subject)) {
+            $this->subjects->removeElement($subject);
+        }
 
         return $this;
     }

@@ -17,6 +17,7 @@ class Message
         $this->setClaps(0);
         $this->setIsPublished(true);
         $this->setCreationDate(new \DateTime());
+
     }
 
     /**
@@ -53,6 +54,13 @@ class Message
      * @ORM\Column(type="datetime")
      */
     private $creationDate;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Question",
+     *      inversedBy="messages")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $question;
 
     public function getId(): ?int
     {
@@ -103,6 +111,18 @@ class Message
     public function setCreationDate(\DateTimeInterface $creationDate): self
     {
         $this->creationDate = $creationDate;
+
+        return $this;
+    }
+
+    public function getQuestion(): ?Question
+    {
+        return $this->question;
+    }
+
+    public function setQuestion(?Question $question): self
+    {
+        $this->question = $question;
 
         return $this;
     }

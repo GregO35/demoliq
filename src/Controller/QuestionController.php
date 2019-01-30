@@ -100,6 +100,8 @@ class QuestionController extends AbstractController
 
         // création du formulaire message
         $message = new Message();
+        $message->setQuestion($question);
+
         // création intance formulaire, les données sont mises directement dans l'entité
         $messageForm= $this->createForm(MessageType::class, $message);
 
@@ -130,7 +132,9 @@ class QuestionController extends AbstractController
             ->getRepository(Message::class);
         //récupère les 200 messages les plus récents
         $messages= $messageRepository->findBy(
-            ['isPublished'=>true],
+            ['isPublished'=>true,
+                'question'=> $question
+            ],
             ['creationDate'=>'DESC'],
             200
         );
@@ -157,12 +161,14 @@ class QuestionController extends AbstractController
 
         // SELECT * FROM question WHERE status = 'debating'
         // ORDER BY supports DESC LIMIT 1000
-        $questions = $questionRepository->findBy(
-            ['status' => 'debating'], //where
-            ['supports' => 'DESC'], //order by
-            1000, //limit
-            0 //offset
-        );
+        //$questions = $questionRepository->findBy(
+         //   ['status' => 'debating'], //where
+         //   ['supports' => 'DESC'], //order by
+         //   1000, //limit
+         //   0 //offset
+        //);
+
+        $questions = $questionRepository->findListQuestions();
 
 
         //dd($questions);
