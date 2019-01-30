@@ -14,7 +14,7 @@
 
 
     <h2>La question en détails</h2>
-    <div>{{ question.description }}</div>
+    <div>{{ question.description |nl2br }}</div>
 
     <h2>Le débat</h2>
 
@@ -29,8 +29,9 @@
 
     {% for message in messages %}
     <div class ="message">
-        <p>Envoyé par Manon, le 30/01/2018</p>
-        <p>{{ message.content }}</p>
+        <p>Envoyé par Manon, le {{ message.creationDate |date('d-m-Y H:i:s')}} </p>
+        <p>{{ message.content |nl2br }}</p>
+    </br>
     </div>
     {% endfor %}
 

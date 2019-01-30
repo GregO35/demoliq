@@ -16,7 +16,7 @@ class Message
     {
         $this->setClaps(0);
         $this->setIsPublished(true);
-        $this->setDateCreated(new \DateTime());
+        $this->setCreationDate(new \DateTime());
     }
 
     /**
@@ -52,7 +52,7 @@ class Message
     /**
      * @ORM\Column(type="datetime")
      */
-    private $dateCreated;
+    private $creationDate;
 
     public function getId(): ?int
     {
@@ -95,14 +95,14 @@ class Message
         return $this;
     }
 
-    public function getDateCreated(): ?\DateTimeInterface
+    public function getCreationDate(): ?\DateTimeInterface
     {
-        return $this->dateCreated;
+        return $this->creationDate;
     }
 
-    public function setDateCreated(\DateTimeInterface $dateCreated): self
+    public function setCreationDate(\DateTimeInterface $creationDate): self
     {
-        $this->dateCreated = $dateCreated;
+        $this->creationDate = $creationDate;
 
         return $this;
     }

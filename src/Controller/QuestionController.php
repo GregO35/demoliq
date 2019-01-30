@@ -103,36 +103,44 @@ class QuestionController extends AbstractController
         // création intance formulaire, les données sont mises directement dans l'entité
         $messageForm= $this->createForm(MessageType::class, $message);
 
+        //récupère les données présentes dans la requête et les injecte dans notre message
         $messageForm->handleRequest($request);
-
+        //si le formulaire est valide et soumis
         if ($messageForm->isSubmitted()&&
             $messageForm->isValid()){
+            // récupère l'Entity Manager
             $em = $this
                 ->getDoctrine()
                 ->getManager();
+            //sauvegarde l'instance
             $em->persist($message);
+            //exécute
             $em->flush();
 
             // crée un flash message
             $this->addFlash('success', 'Merci pour votre message !');
 
-            //redirige vers la page de détails de cette question
+            //redirige vers la page de détails où apparait le message (pour vider le formulaire)
             return $this->redirectToRoute('question_detail',
                 ['id'=> $question->getId()]);
         }
-
+        //récupère le messageRepository
         $messageRepository = $this
             ->getDoctrine()
             ->getRepository(Message::class);
-
-        $messages= $messageRepository->findAll();
+        //récupère les 200 messages les plus récents
+        $messages= $messageRepository->findBy(
+            ['isPublished'=>true],
+            ['creationDate'=>'DESC'],
+            200
+        );
 
 
         return $this ->render('question/details.html.twig',[
             // on nomme la clé comme la variable - compact("question") en argument
-            'question'=> $question,
-            'messages' => $messages,
-            "messageForm"=> $messageForm->createView()
+            'question'=> $question, //passe les questions à twig
+            'messages' => $messages, //passe les messages à twig
+            "messageForm"=> $messageForm->createView() //passe le formulaire à twig
         ]);
     }
 
