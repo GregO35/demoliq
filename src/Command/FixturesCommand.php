@@ -33,18 +33,18 @@ class FixturesCommand extends Command
 
         $faker = \Faker\Factory::create('fr_FR');
 
-        $conn=$this->en->getConnection();
+        $conn=$this->em->getConnection();
         $conn->query ('TRUNCATE question');
 
-        for($i=0; $i<100; $i++){
+        for($i=0; $i<20; $i++){
 
             $question = new Question();
 
-            $question->setTitle($faker->name);
+            $question->setTitle($faker->sentence);
             $question->setDescription($faker->realText(500));
             $question->setStatus($faker->randomElement(['debating', 'voting', 'closed']));
-            $question->setSupports($faker->optional(0.5, 0)->numberBetween(0,47000000));
-            $question->setCreationDate($faker->dateTimeBetween('- 1 year', 'now'));
+            $question->setSupports($faker->numberBetween(0,4700000));
+            $question->setCreationDate($faker->dateTimeBetween ($startDate = '-1 years', $endDate = 'now', $timezone = null) );
 
             $this->em->persist($question);
         }

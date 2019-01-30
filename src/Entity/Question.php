@@ -20,9 +20,6 @@ class Question
      */
     public function prePersist()
     {
-        $this->setCreationDate(new \DateTime());
-        $this->setSupports(0);
-        $this->setStatus('debating');
     }
 
     public function __construct()

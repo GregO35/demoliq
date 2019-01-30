@@ -22,15 +22,15 @@
                         <nav class="nav text-center">
                             <a href="{{ path ('home') }}"><img class ="img-fluid" alt = "Demoliq" src="{{ asset('img/people.png') }}"></a>
                             <p class="nav-link"><strong>Demoliq</strong></p>
-                            <a class="nav-link" href="{{ path ('home') }}">Lien1</a>
-                            <a class="nav-link" href="{{ path ('faq') }}">Lien2</a>
+                            <a class="nav-link" href="{{ path ('question_list') }}">Débattre</a>
+                            <a class="nav-link" href="{{ path ('faq') }}">Voter</a>
                         </nav>
                     </div>
 
 
               </header>
 
-              <main>
+              <main class="content">
                   {#affichage des éventuels flash message#}
                   {% for label, messages in app.flashes %}
                       {% for message in messages %}
@@ -42,7 +42,7 @@
              </main>
 
             <div>
-                <footer class ="container fixed-bottom">
+                <footer>
 
                     <nav class="nav text-center">
                         <a class="nav-link mx-auto" href="{{ path ('home') }}">Accueil</a>

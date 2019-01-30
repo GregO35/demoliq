@@ -3,7 +3,9 @@
 namespace App\Controller;
 
 
+use App\Entity\Message;
 use App\Entity\Question;
+use App\Form\MessageType;
 use App\Form\QuestionType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -81,7 +83,7 @@ class QuestionController extends AbstractController
      *     requirements={"id" : "\d+"},
      *     methods={"GET", "POST"})
      */
-    public function details(int $id)
+    public function details(Request $request, int $id)
         //public function details (Question $question)
     {
         $questionRepository = $this
@@ -96,9 +98,41 @@ class QuestionController extends AbstractController
             throw $this->createNotFoundException("Cette question n'existe pas !");
         }
 
+        // création du formulaire message
+        $message = new Message();
+        // création intance formulaire, les données sont mises directement dans l'entité
+        $messageForm= $this->createForm(MessageType::class, $message);
+
+        $messageForm->handleRequest($request);
+
+        if ($messageForm->isSubmitted()&&
+            $messageForm->isValid()){
+            $em = $this
+                ->getDoctrine()
+                ->getManager();
+            $em->persist($message);
+            $em->flush();
+
+            // crée un flash message
+            $this->addFlash('success', 'Merci pour votre message !');
+
+            //redirige vers la page de détails de cette question
+            return $this->redirectToRoute('question_detail',
+                ['id'=> $question->getId()]);
+        }
+
+        $messageRepository = $this
+            ->getDoctrine()
+            ->getRepository(Message::class);
+
+        $messages= $messageRepository->findAll();
+
+
         return $this ->render('question/details.html.twig',[
             // on nomme la clé comme la variable - compact("question") en argument
-            'question' => $question
+            'question'=> $question,
+            'messages' => $messages,
+            "messageForm"=> $messageForm->createView()
         ]);
     }
 
@@ -122,6 +156,7 @@ class QuestionController extends AbstractController
             0 //offset
         );
 
+
         //dd($questions);
         //var dump et die()
 
@@ -130,4 +165,7 @@ class QuestionController extends AbstractController
             ]);
 
     }
+
+
+
 }

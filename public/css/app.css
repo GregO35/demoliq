@@ -1,4 +1,4 @@
-bod{
+.container{
     font-family: 'Open Sans', sans-serif;
     background-color: #b8daff;
     min-height: 100vh;
@@ -6,9 +6,11 @@ bod{
     flex-direction: column;
 }
 
-main{
+.content
+{
     flex :1;
 }
+
 header{
     background-color: white;
 }
