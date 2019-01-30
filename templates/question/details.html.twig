@@ -28,13 +28,15 @@
         {{ form_widget(messageForm) }}
         <button class="btn btn-success">Envoyer!</button>
         {{ form_end(messageForm) }}
+    </br>
+
 
     {% for message in messages %}
-    <div class ="message">
-        <p>Envoyé par Manon, le {{ message.creationDate |date('d-m-Y H:i:s')}} </p>
+    <div class ="border border-info">
+        <p><em>Envoyé par Manon, le {{ message.creationDate |date('d-m-Y H:i:s')}} </em></p>
         <p>{{ message.content |nl2br }}</p>
-    </br>
     </div>
+        </br>
     {% endfor %}
 
 
