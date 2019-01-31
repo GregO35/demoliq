@@ -95,6 +95,16 @@ class FixturesCommand extends Command
     //on ajoute ce sujet à notre tableau d'objets
     $allSubjects[] = $subject;
     }
+
+        /*$allUsers =[];
+        foreach ($allUsers as $username){
+            $user = new User();
+            $user->setUsername($username);
+            $this->em->persist($user);
+            //on ajoute ce sujet à notre tableau d'objets
+            $allUsers[] = $user;
+        }
+        */
         $this->em->flush();
 
         // démarre la barre de progression avec 200 opérations
@@ -144,6 +154,8 @@ class FixturesCommand extends Command
                         $message->setQuestion($question);
                         //mettre user dans un tableau et récupérer aléatoirement le user
                         $message->setUser($user);
+
+                        //$message->setUser($faker->randomElement(['user']));
                         $message->setClaps($faker->optional(0.5, 0)->numberBetween(0,5000));
                         $message->setCreationDate($faker->dateTimeBetween($question->getCreationDate()));
                         $message->setIsPublished($faker->boolean(95));
