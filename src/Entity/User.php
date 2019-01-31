@@ -18,10 +18,16 @@ use Symfony\Component\Validator\Constraints as Assert;
 class User implements UserInterface
 {
 
+    public function __toString()
+    {
+        return $this->getUsername();
+    }
+
     public function __construct()
     {
         $this->setRoles(['user']);
         $this->userQuestion = new ArrayCollection();
+        $this->userMessage = new ArrayCollection();
 
     }
 
@@ -65,6 +71,11 @@ class User implements UserInterface
      * @ORM\OneToMany(targetEntity="App\Entity\Question", mappedBy="user")
      */
     private $userQuestion;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Message", mappedBy="user")
+     */
+    private $userMessage;
 
     public function getId(): ?int
     {
@@ -188,6 +199,37 @@ class User implements UserInterface
             // set the owning side to null (unless already changed)
             if ($userQuestion->getUser() === $this) {
                 $userQuestion->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Message[]
+     */
+    public function getUserMessage(): Collection
+    {
+        return $this->userMessage;
+    }
+
+    public function addUserMessage(Message $userMessage): self
+    {
+        if (!$this->userMessage->contains($userMessage)) {
+            $this->userMessage[] = $userMessage;
+            $userMessage->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUserMessage(Message $userMessage): self
+    {
+        if ($this->userMessage->contains($userMessage)) {
+            $this->userMessage->removeElement($userMessage);
+            // set the owning side to null (unless already changed)
+            if ($userMessage->getUser() === $this) {
+                $userMessage->setUser(null);
             }
         }
 

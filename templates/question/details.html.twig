@@ -8,6 +8,7 @@
 
     <div>
         <div>{{ question.supports }} appuis | Créée le {{ question.creationDate|date('d-m-Y H:i:s') }}</div>
+        <div> Question posée par {{ question.user.username }}</div>
 
         <div class="">
             {% if app.user %}
@@ -39,7 +40,7 @@
 
     {% for message in messages %}
     <div class ="border border-info">
-        <p><em>Envoyé par Manon, le {{ message.creationDate |date('d-m-Y H:i:s')}} </em></p>
+        <p><em>Envoyé par {{ message.user.username }}, le {{ message.creationDate |date('d-m-Y H:i:s')}} </em></p>
         <p>{{ message.content |nl2br }}</p>
     </div>
         </br>

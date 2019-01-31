@@ -11,14 +11,20 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class FixturesCommand extends Command
 {
     protected static $defaultName = 'app:fixtures';
     protected $em = null;
+    protected $encoder=null;
     // constructeur
-    public function __construct(EntityManagerInterface $em, ?string $name = null)
+    public function __construct(
+        EntityManagerInterface $em,
+        UserPasswordEncoderInterface $encoder,
+        ?string $name = null)
     {
+        $this->encoder =$encoder;
         $this->em = $em;
         parent::__construct($name);
     }
@@ -96,9 +102,13 @@ class FixturesCommand extends Command
 
         for($d=0; $d<25;$d++){
             $user = new User ();
-            $user->setUsername($faker->name);
-            $user->setEmail($faker->email);
-            $user->setPassword($faker->password);
+            $user->setUsername($faker->unique()->userName);
+            $user->setEmail($faker->unique()->email);
+            //$user->setPassword($faker->password);
+            $password =$user->getUsername();
+            $hash =$this->encoder->encodePassword($user, $password);
+            $user->setPassword($hash);
+
             $user->setSocialSecurityNumber($faker->numberBetween(10000,2000000));
             $user->setRoles($faker->randomElement([['admin'], ['user']]));
             $this->em->persist($user);
@@ -132,6 +142,8 @@ class FixturesCommand extends Command
                     for ($m = 0; $m < $messageNumber; $m++){
                         $message = new Message();
                         $message->setQuestion($question);
+                        //mettre user dans un tableau et récupérer aléatoirement le user
+                        $message->setUser($user);
                         $message->setClaps($faker->optional(0.5, 0)->numberBetween(0,5000));
                         $message->setCreationDate($faker->dateTimeBetween($question->getCreationDate()));
                         $message->setIsPublished($faker->boolean(95));
