@@ -19,11 +19,21 @@
                 <header>
                     <div>
 
-                        <nav class="nav text-center">
+                        <nav class="nav">
                             <a href="{{ path ('home') }}"><img class ="img-fluid" alt = "Demoliq" src="{{ asset('img/people.png') }}"></a>
                             <p class="nav-link"><strong>Demoliq</strong></p>
+                            {% if app.user %}
                             <a class="nav-link" href="{{ path ('question_list') }}">Débattre</a>
                             <a class="nav-link" href="{{ path ('question_create') }}">Ajouter</a>
+                            <a class="nav-link" href="{{ path ('app_logout') }}">Deconnexion</a>
+
+                            {% else %}
+                             <a class="nav-link" href="{{ path ('question_list') }}">Débattre</a>
+                             <a class="nav-link" href="{{ path ('question_create') }}">Ajouter</a>
+                             <a class="nav-link float-right" href="{{ path('app_register') }}">Inscription</a>
+                             <a class="nav-link float-right" href="{{ path('app_login') }}">Se connecter</a>
+                            {% endif %}
+
                         </nav>
                     </div>
 

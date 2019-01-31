@@ -15,7 +15,8 @@ class QuestionController extends AbstractController
 {
     /**
      *
-     * @Route("/questions/ajouter",
+     * @Route(
+     *     "/questions/ajouter",
      *     name="question_create",
      *     methods={"GET", "POST"}
      *     )
@@ -23,6 +24,14 @@ class QuestionController extends AbstractController
      */
     public function create(Request $request) //prendre le http/fondation pour le use
     {
+        /*
+         * ce code fait la même chose que dans acces control
+        if (!$this->isGranted("ROLE_USER")){
+            throw $this->createAccessDeniedException("dégage");
+        }
+
+        $this->denyAccessUnlessGranted("ROLE_USER");
+        */
         $question = new Question();
 
         // création intance formulaire, les données sont mises directement dans l'entité

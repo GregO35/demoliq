@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+    <h1>Formulaire d'inscription</h1>
+
+    {# affiche le formulaire#}
+    {#novalidate pour désactiver les champs de saisie obligatoire dans le navigateur#}
+    {{ form_start(userForm, {'attr':{'novalidate': 'novalidate'}}) }}
+    {{ form_widget(userForm) }}
+    <button class="btn btn-success">Valider l'inscription!</button>
+    {{ form_end(userForm) }}
+
+    <div class="mt-3">
+        <h4>Vous avez déjà un compte ?</h4>
+        <a href="{{ path('app_login') }}">Connectez-vous ici !</a>
+
+    </div>
+
+{% endblock %}
+
+{% block title %}Inscription{% endblock %}
+

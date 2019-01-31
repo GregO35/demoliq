@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Question;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
@@ -45,9 +46,10 @@ class QuestionRepository extends ServiceEntityRepository
     // la propriété remplace le nom de la colonne
     public function findListQuestions()
     {
-        $dql ="SELECT q, s 
+        $dql ="SELECT q, s, m 
                FROM App\Entity\Question q
                JOIN q.subjects s
+               LEFT JOIN q.messages m
                WHERE q.status = 'debating'
                ORDER BY q.creationDate DESC";
         //where q.status = :status
@@ -56,9 +58,12 @@ class QuestionRepository extends ServiceEntityRepository
         $query->setMaxResults(200);
         $query->setFirstResult(0);
         //$query->setParameter('stauts','debating');
-        $questions = $query->getResult();
+        // on utilise le paginator pour avoir le bon nombre de résultats malgré la jointure
+        // on remplace le $questions = $query->getResult(); par le paginator
+        $paginator = new Paginator($query);
+       // $questions = $query->getResult();
 
-        return $questions;
+        return $paginator;
     }
 
     // /**
