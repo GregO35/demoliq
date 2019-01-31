@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -19,6 +21,7 @@ class User implements UserInterface
     public function __construct()
     {
         $this->setRoles(['user']);
+        $this->userQuestion = new ArrayCollection();
 
     }
 
@@ -57,6 +60,11 @@ class User implements UserInterface
      * @ORM\Column(type="string", length=15)
      */
     private $socialSecurityNumber;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Question", mappedBy="user")
+     */
+    private $userQuestion;
 
     public function getId(): ?int
     {
@@ -151,6 +159,37 @@ class User implements UserInterface
     public function setSocialSecurityNumber(string $socialSecurityNumber): self
     {
         $this->socialSecurityNumber = $socialSecurityNumber;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Question[]
+     */
+    public function getUserQuestion(): Collection
+    {
+        return $this->userQuestion;
+    }
+
+    public function addUserQuestion(Question $userQuestion): self
+    {
+        if (!$this->userQuestion->contains($userQuestion)) {
+            $this->userQuestion[] = $userQuestion;
+            $userQuestion->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUserQuestion(Question $userQuestion): self
+    {
+        if ($this->userQuestion->contains($userQuestion)) {
+            $this->userQuestion->removeElement($userQuestion);
+            // set the owning side to null (unless already changed)
+            if ($userQuestion->getUser() === $this) {
+                $userQuestion->setUser(null);
+            }
+        }
 
         return $this;
     }

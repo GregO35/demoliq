@@ -35,5 +35,6 @@ security:
     access_control:
         # protège une URL... on exige le ROLE_USER
         - {path: ^/questions/ajouter$, roles: ROLE_USER }
+        - {path: ^/monCompte$, roles: ROLE_USER }
         # - { path: ^/admin, roles: ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }

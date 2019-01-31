@@ -43,4 +43,13 @@ class DefaultController extends AbstractController
         return $this->render('default/fonctionnement.html.twig');
     }
 
+    /**
+     * @Route("/monCompte", name="monCompte")
+     *
+     */
+    public function infoCompte()
+    {
+        return $this->render('default/monCompte.html.twig');
+    }
+
 }

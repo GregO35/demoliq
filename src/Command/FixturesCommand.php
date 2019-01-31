@@ -80,62 +80,21 @@ class FixturesCommand extends Command
             "Santé",
             "Démocratie"
         ];
-
-        //garder en mémoire nos objets Subject
-        $allSubjects =[];
-        foreach ($subjects as $label){
-            $subject = new Subject();
-            $subject->setLabel($label);
-            $this->em->persist($subject);
-            //on ajoute ce sujet à notre tableau d'objets
-            $allSubjects[] = $subject;
-        }
+    //garder en mémoire nos objets Subject
+    $allSubjects =[];
+    foreach ($subjects as $label){
+    $subject = new Subject();
+    $subject->setLabel($label);
+    $this->em->persist($subject);
+    //on ajoute ce sujet à notre tableau d'objets
+    $allSubjects[] = $subject;
+    }
         $this->em->flush();
 
         // démarre la barre de progression avec 200 opérations
         $io->progressStart(200);
 
-        for($i=0; $i<100; $i++){
-            //fait avancer la barre de progression
-            $io->progressAdvance(1);
-
-            $question = new Question();
-
-            $question->setTitle($faker->sentence);
-            $question->setDescription($faker->realText(500));
-
-            //ajoute entre 1 et 3 sujets à cette question
-            $num= mt_rand(1,3);
-            for ($b = 0; $b < $num; $b++){
-                $s = $faker->randomElement($allSubjects);
-                    $question->addSubject($s);
-            }
-
-            $question->setStatus($faker->randomElement(['debating', 'voting', 'closed']));
-            $question->setSupports($faker->numberBetween(0,4700000));
-            $question->setCreationDate($faker->dateTimeBetween ($startDate = '-1 years', $endDate = 'now', $timezone = null) );
-
-            //ajoute des messages sur les questions
-            $messageNumber = mt_rand(0,20);
-            for ($m = 0; $m < $messageNumber; $m++){
-                $message = new Message();
-                $message->setQuestion($question);
-                $message->setClaps($faker->optional(0.5, 0)->numberBetween(0,5000));
-                $message->setCreationDate($faker->dateTimeBetween($question->getCreationDate()));
-                $message->setIsPublished($faker->boolean(95));
-                $message->setContent($faker->paragraphs($nb = mt_rand(1,3), $asText = true));
-                $this->em->persist($message);
-            }
-            $this->em->persist($question);
-
-
-
-            // données bidon pour le user
-
-
-        }
-
-        for($d=0; $d<100;$d++){
+        for($d=0; $d<25;$d++){
             $user = new User ();
             $user->setUsername($faker->name);
             $user->setEmail($faker->email);
@@ -144,7 +103,51 @@ class FixturesCommand extends Command
             $user->setRoles($faker->randomElement([['admin'], ['user']]));
             $this->em->persist($user);
 
+
+
+
+            for($i=0; $i<20; $i++){
+                //fait avancer la barre de progression
+                $io->progressAdvance(1);
+
+                $question = new Question();
+
+                $question->setTitle($faker->sentence);
+                $question->setDescription($faker->realText(500));
+
+                //ajoute entre 1 et 3 sujets à cette question
+                $num= mt_rand(1,3);
+                for ($b = 0; $b < $num; $b++){
+                    $s = $faker->randomElement($allSubjects);
+                        $question->addSubject($s);
+                }
+
+                $question->setUser($user);
+                $question->setStatus($faker->randomElement(['debating', 'voting', 'closed']));
+                $question->setSupports($faker->numberBetween(0,4700000));
+                $question->setCreationDate($faker->dateTimeBetween ($startDate = '-1 years', $endDate = 'now', $timezone = null) );
+
+                //ajoute des messages sur les questions
+                    $messageNumber = mt_rand(0,10);
+                    for ($m = 0; $m < $messageNumber; $m++){
+                        $message = new Message();
+                        $message->setQuestion($question);
+                        $message->setClaps($faker->optional(0.5, 0)->numberBetween(0,5000));
+                        $message->setCreationDate($faker->dateTimeBetween($question->getCreationDate()));
+                        $message->setIsPublished($faker->boolean(95));
+                        $message->setContent($faker->paragraphs($nb = mt_rand(1,3), $asText = true));
+                        $this->em->persist($message);
+                    }
+                $this->em->persist($question);
+
+
+
+            // données bidon pour le user
+
+
         }
+        }
+
         // fin de la barre de progression
         $io->progressFinish();
 
