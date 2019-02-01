@@ -40,8 +40,19 @@
 
     {% for message in messages %}
     <div class ="border border-info">
+
         <p><em>Envoyé par {{ message.user.username }}, le {{ message.creationDate |date('d-m-Y H:i:s')}} </em></p>
+
         <p>{{ message.content |nl2br }}</p>
+
+
+        <div>
+
+            <button class ="clap-btn" data-url="{{ path('api_clap_post', {'id': message.id}) }}">Clap! </button>
+
+            <div class="clap-num"> {{ message.claps }}</div>
+        </div>
+
     </div>
         </br>
     {% endfor %}

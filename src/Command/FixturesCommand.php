@@ -96,20 +96,13 @@ class FixturesCommand extends Command
     $allSubjects[] = $subject;
     }
 
-        /*$allUsers =[];
-        foreach ($allUsers as $username){
-            $user = new User();
-            $user->setUsername($username);
-            $this->em->persist($user);
-            //on ajoute ce sujet à notre tableau d'objets
-            $allUsers[] = $user;
-        }
-        */
+
         $this->em->flush();
 
         // démarre la barre de progression avec 200 opérations
         $io->progressStart(200);
 
+        $allUsers =[];
         for($d=0; $d<25;$d++){
             $user = new User ();
             $user->setUsername($faker->unique()->userName);
@@ -122,7 +115,7 @@ class FixturesCommand extends Command
             $user->setSocialSecurityNumber($faker->numberBetween(10000,2000000));
             $user->setRoles($faker->randomElement([['admin'], ['user']]));
             $this->em->persist($user);
-
+            $allUsers[] = $user;
 
 
 
@@ -142,7 +135,7 @@ class FixturesCommand extends Command
                         $question->addSubject($s);
                 }
 
-                $question->setUser($user);
+                $question->setUser($faker->randomElement($allUsers));
                 $question->setStatus($faker->randomElement(['debating', 'voting', 'closed']));
                 $question->setSupports($faker->numberBetween(0,4700000));
                 $question->setCreationDate($faker->dateTimeBetween ($startDate = '-1 years', $endDate = 'now', $timezone = null) );
@@ -153,7 +146,7 @@ class FixturesCommand extends Command
                         $message = new Message();
                         $message->setQuestion($question);
                         //mettre user dans un tableau et récupérer aléatoirement le user
-                        $message->setUser($user);
+                        $message->setUser($faker->randomElement($allUsers));
 
                         //$message->setUser($faker->randomElement(['user']));
                         $message->setClaps($faker->optional(0.5, 0)->numberBetween(0,5000));
@@ -171,6 +164,7 @@ class FixturesCommand extends Command
 
         }
         }
+
 
         // fin de la barre de progression
         $io->progressFinish();

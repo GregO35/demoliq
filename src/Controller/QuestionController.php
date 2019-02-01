@@ -119,6 +119,8 @@ class QuestionController extends AbstractController
         //si le formulaire est valide et soumis
         if ($messageForm->isSubmitted()&&
             $messageForm->isValid()){
+            //limite l'accès à ce "if" aux utilisateurs connectés
+            $this->denyAccessUnlessGranted("ROLE_USER");
             // récupère l'Entity Manager
             $em = $this
                 ->getDoctrine()

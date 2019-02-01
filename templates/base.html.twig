@@ -25,7 +25,7 @@
                             {% if app.user %}
                             <a class="nav-link" href="{{ path ('question_list') }}">Débattre</a>
                             <a class="nav-link" href="{{ path ('question_create') }}">Ajouter</a>
-                            <a class="nav-link" href="{{ path ('monCompte') }}">Mon compte</a>
+                            <a class="nav-link" href="{{ path ('monCompte') }}">Mon compte ({{ app.user }})</a>
                             <a class="nav-link" href="{{ path ('app_logout') }}">Deconnexion</a>
 
                             {% else %}
@@ -70,6 +70,6 @@
 
         <script src="{{ asset('js/jquery.js') }}"></script>
         <script src="{{ asset('js/bootstrap.js') }}"></script>
-
+        <script src="{{ asset('js/app.js') }}"></script>
     </body>
 </html>

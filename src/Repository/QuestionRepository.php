@@ -46,9 +46,10 @@ class QuestionRepository extends ServiceEntityRepository
     // la propriété remplace le nom de la colonne
     public function findListQuestions()
     {
-        $dql ="SELECT q, s, m 
+        $dql ="SELECT q, s, m, a 
                FROM App\Entity\Question q
                JOIN q.subjects s
+               JOIN q.user a
                LEFT JOIN q.messages m
                WHERE q.status = 'debating'
                ORDER BY q.creationDate DESC";
